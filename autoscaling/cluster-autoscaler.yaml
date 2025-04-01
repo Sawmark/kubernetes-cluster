@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: cluster-autoscaler
+  template:
+    metadata:
+      labels:
+        component: cluster-autoscaler
+    spec:
+      containers:
+        - name: cluster-autoscaler
+          image: k8s.gcr.io/cluster-autoscaler:v1.21.0
+          command:
+            - ./cluster-autoscaler
+            - --cloud-provider=aws  # Modify for your cloud provider
+            - --nodes=2:10:<node-group-name>
